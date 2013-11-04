@@ -303,7 +303,25 @@ void protocol_process()
       if (sys.abort) { return; } // Bail to main program upon system abort    
 
       if (char_counter > 0) {// Line is complete. Then execute!
-        line[char_counter] = 0; // Terminate string
+		
+		line[char_counter] = 0;
+
+		uint8_t crc = 0;
+		uint8_t i;
+		for(i = 0; i < char_counter-2; i++)
+		{
+			if (line[i] == '*')
+			{
+				if (atoi(line[i+1]) != crc){
+			        report_status_message(STATUS_CRC_ERROR);
+    	    		protocol_reset_line_buffer();
+    	    	}
+    	    	else
+			        line[i] = 0;
+			}
+			crc ^= line[i];
+		}
+
         report_status_message(protocol_execute_line(line));
       } else { 
         // Empty or comment line. Skip block.

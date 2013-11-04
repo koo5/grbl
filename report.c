@@ -76,6 +76,8 @@ void report_status_message(uint8_t status_code)
       printPgmString(PSTR("Alarm lock")); break;
       case STATUS_OVERFLOW:
       printPgmString(PSTR("Line overflow")); break;
+      case STATUS_CRC_ERROR:
+      printPgmString(PSTR("CRC error")); break;
     }
     printPgmString(PSTR("\r\n"));
   }
